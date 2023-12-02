@@ -25,7 +25,7 @@ inputs:
   max-length:
     description: 'Maximum number of characters to submit to OpenAI'
     required: false
-    default: 4000
+    default: 1000
 
 outputs:
   results:
