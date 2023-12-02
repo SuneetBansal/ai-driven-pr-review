@@ -16,7 +16,7 @@ inputs:
     default: |
       'Please review the code and share your feedbacks.'
 runs:
-  using: node18
+  using: node12
   main: index.js
 
 
