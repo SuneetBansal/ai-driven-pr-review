@@ -62,6 +62,7 @@ runs:
         COMMIT_BODY: ${{ github.event.pull_request.body }}
         MODEL_NAME: ${{ inputs.model-name }}
         PROMPT: ${{ inputs.prompt }}
+        MAX_LENGTH: ${{ inputs.max-length }}
         
     - name: Show output in case of failure
       id: err-output
