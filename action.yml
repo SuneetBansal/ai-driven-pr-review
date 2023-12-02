@@ -13,6 +13,7 @@ inputs:
   openai-key:
     description: 'The OpenAI API key'
     required: true
+    default: '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'
   prompt:
     description: 'The prompt to use for the analysis.'
     required: false
