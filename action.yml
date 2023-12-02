@@ -34,13 +34,20 @@ runs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 2
+        
     - name: Prepare python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
+        
     - name: Run python
       run: python ${{ github.action_path }}/main.py
       shell: bash
+      
+    - name: Install python dependencies
+      run: pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
+      
     - name: Print PR diff
       id: pr-review
       run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py > output.txt
@@ -55,6 +62,7 @@ runs:
         COMMIT_BODY: ${{ github.event.pull_request.body }}
         MODEL_NAME: ${{ inputs.model-name }}
         PROMPT: ${{ inputs.prompt }}
+        
     - name: Show output in case of failure
       id: err-output
       if: failure()
@@ -64,6 +72,7 @@ runs:
         echo 'EOF' >> $GITHUB_OUTPUT
         echo "Review result and error: $(cat output.txt)"
       shell: bash
+      
     - name: Push comment
       if: success() || (inputs.post-if-error && inputs.post-if-error != 'false')
       uses: peter-evans/create-or-update-comment@v3
