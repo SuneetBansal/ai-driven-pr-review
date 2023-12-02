@@ -57,7 +57,7 @@ runs:
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
-        OPEN_AI_TOKEN: ${{ inputs.open-ai-token }}
+        OPENAI_API_KEY: ${{ inputs.open-ai-token }}
         COMMIT_TITLE: ${{ github.event.pull_request.title }}
         COMMIT_BODY: ${{ github.event.pull_request.body }}
         MODEL_NAME: ${{ inputs.model-name }}
