@@ -16,7 +16,18 @@ inputs:
     default: |
       Please review the code and share your feedbacks.
 runs:
-  using: node12
-  main: index.js
+  using: 'composite'
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: Prepare python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    - name: Run python
+      run: python ${{ github.action_path }}/main.py
+      
 
 
