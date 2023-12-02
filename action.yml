@@ -46,9 +46,9 @@ runs:
       
     - name: Print PR diff
       id: pr-review
-      run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py > output.txt
+      run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py > review.txt
            echo 'openaireviewresult<<EOF' >> $GITHUB_OUTPUT
-           echo "$(cat output.txt)" >> $GITHUB_OUTPUT
+           echo "$(cat review.txt)" >> $GITHUB_OUTPUT
            echo 'EOF' >> $GITHUB_OUTPUT
       shell: bash
       env:
@@ -65,9 +65,9 @@ runs:
       if: failure()
       run: |
         echo 'errorresult<<EOF' >> $GITHUB_OUTPUT
-        echo "ERROR: $(cat output.txt)" >> $GITHUB_OUTPUT
+        echo "ERROR: $(cat review.txt)" >> $GITHUB_OUTPUT
         echo 'EOF' >> $GITHUB_OUTPUT
-        echo "Review result and error: $(cat output.txt)"
+        echo "Review result and error: $(cat review.txt)"
       shell: bash
       
     - name: Push comment
