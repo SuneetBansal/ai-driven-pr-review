@@ -2,6 +2,10 @@ name: ai-enabled-pr-review
 authir: Suneet Bansal
 description: This will be a github action which would review PR changes and push comments
 inputs:
+  github-token:
+    description: Github token for authentication
+    required: false
+    default: ${{github.token}}
   open-ai-token:
     description: Token of Open AI account
     required: true
@@ -29,6 +33,11 @@ runs:
     - name: Run python
       run: python ${{ github.action_path }}/main.py
       shell: bash
+    - name: Print PR diff
+      run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       
 
 
