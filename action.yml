@@ -1,0 +1,22 @@
+name: 'ai-enabled-pr-review'
+authir: Suneet Bansal
+description: 'This will be a github action which would review PR changes and push comments'
+inputs:
+  open-ai-token:
+    description: 'Token of Open AI account'
+    required: true
+    default: 'OpenAIToken'
+  model-name:
+    description: 'Generative AI model name'
+    required: false
+    default: 'gpt-3.5-turbo'
+  prompt:
+    descrption: 'You can provide the prompt what kind of analysis you required from Generatibe AI model'
+    required: false
+    default: |
+      'Please review the code and share your feedbacks.'
+runs:
+  using: node18
+  main: index.js
+
+
