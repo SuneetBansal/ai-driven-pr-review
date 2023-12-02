@@ -19,6 +19,14 @@ inputs:
     required: false
     default: |
       Please review the code and share your feedbacks.
+  max-length:
+    description: 'Maximum number of characters to submit to OpenAI'
+    required: false
+    default: 4000
+outputs:
+  results:
+    description: 'The results of the code review'
+    value: ${{ steps.pr-review.outputs.openaireviewresult }}
 runs:
   using: 'composite'
   steps:
@@ -34,10 +42,36 @@ runs:
       run: python ${{ github.action_path }}/main.py
       shell: bash
     - name: Print PR diff
-      run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py
+      id: pr-review
+      run: git diff ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | python ${{ github.action_path }}/main.py > output.txt
+           echo 'openaireviewresult<<EOF' >> $GITHUB_OUTPUT
+           echo "$(cat output.txt)" >> $GITHUB_OUTPUT
+           echo 'EOF' >> $GITHUB_OUTPUT
       shell: bash
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
+        OPEN_AI_TOKEN: ${{ inputs.open-ai-token }}
+        COMMIT_TITLE: ${{ github.event.pull_request.title }}
+        COMMIT_BODY: ${{ github.event.pull_request.body }}
+        MODEL_NAME: ${{ inputs.model-name }}
+        PROMPT: ${{ inputs.prompt }}
+    - name: Show output in case of failure
+      id: err-output
+      if: failure()
+      run: |
+        echo 'errorresult<<EOF' >> $GITHUB_OUTPUT
+        echo "ERROR: $(cat output.txt)" >> $GITHUB_OUTPUT
+        echo 'EOF' >> $GITHUB_OUTPUT
+        echo "Review result and error: $(cat output.txt)"
+      shell: bash
+    - name: Push comment
+      if: success() || (inputs.post-if-error && inputs.post-if-error != 'false')
+      uses: peter-evans/create-or-update-comment@v3
+      with:
+        issue-number: ${{ github.event.pull_request.number }}
+        body: |
+          ${{ steps.pr-review.outputs.openaireviewresult && steps.pr-review.outputs.openaireviewresult || steps.err-output.outputs.errorresult }}
+        reactions: '+1'
       
 
 
