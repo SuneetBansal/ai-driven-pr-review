@@ -21,11 +21,6 @@ inputs:
     required: false
     default: 'gpt-3.5-turbo'
 
-outputs:
-  results:
-    description: 'PR Review result'
-    value: ${{ steps.pr-review.outputs.reviewresult }}
-
 runs:
   using: 'composite'
   steps:
