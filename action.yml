@@ -11,7 +11,7 @@ inputs:
   prompt:
     description: 'Pormpt will use to tell AI model what feedbacks needed for privided code'
     required: false
-    default: Please review the code, provide your feedbacks. Please assume that code is in Typescript and you are following Typescript coding writing best standards.
+    default: Please review the code, provide your feedbacks. Please assume that code is in Javascript and you are following es2015 coding standards.
   model-name:
     description: 'Open AI generative AI model name'
     required: false
