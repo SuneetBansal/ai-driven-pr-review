@@ -11,11 +11,7 @@ inputs:
   prompt:
     description: 'Pormpt will use to tell AI model what feedbacks needed for privided code'
     required: false
-    default: Please review the code, provide your feedbacks. Please assume that code is in Javascript and you are following es2015 standards for code reivew.
-  post-if-error:
-    description: 'Whether to post a comment if there was an error'
-    required: false
-    default: 'true'
+    default: Please review the code, provide your feedbacks. Please assume that code is in Typescript and you are following Typescript coding writing best standards.
   model-name:
     description: 'Open AI generative AI model name'
     required: false
@@ -66,10 +62,10 @@ runs:
       shell: bash
 
     - name: Create comment
-      if: success() || (inputs.post-if-error && inputs.post-if-error != 'false')
+      if: success()
       uses: peter-evans/create-or-update-comment@v3
       with:
         issue-number: ${{ github.event.pull_request.number }}
         body: |
           ${{ steps.pr-review.outputs.reviewresult && steps.pr-review.outputs.reviewresult || steps.err-output.outputs.errorresult }}
-        reactions: '+2'
+        reactions: '+1'
